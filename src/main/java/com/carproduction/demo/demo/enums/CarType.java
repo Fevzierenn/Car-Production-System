@@ -1,4 +1,4 @@
-package com.security.demo.demo.enums;
+package com.carproduction.demo.demo.enums;
 
 public enum CarType {
     SEDAN,

@@ -1,4 +1,4 @@
-package com.security.demo.demo.exceptions;
+package com.carproduction.demo.demo.exceptions;
 
 public class CarNotExistsException extends RuntimeException {
     

@@ -1,4 +1,4 @@
-package com.security.demo.demo.configs;
+package com.carproduction.demo.demo.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

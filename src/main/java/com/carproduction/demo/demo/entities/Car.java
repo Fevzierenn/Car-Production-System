@@ -1,7 +1,7 @@
-package com.security.demo.demo.entities;
+package com.carproduction.demo.demo.entities;
 
-import com.security.demo.demo.enums.CarType;
-import com.security.demo.demo.enums.FuelType;
+import com.carproduction.demo.demo.enums.CarType;
+import com.carproduction.demo.demo.enums.FuelType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

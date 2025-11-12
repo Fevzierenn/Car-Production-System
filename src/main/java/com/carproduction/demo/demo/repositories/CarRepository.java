@@ -1,10 +1,10 @@
-package com.security.demo.demo.repositories;
+package com.carproduction.demo.demo.repositories;
 
 import org.springframework.stereotype.Repository;
 
-import com.security.demo.demo.entities.Car;
-import com.security.demo.demo.enums.CarType;
-import com.security.demo.demo.enums.FuelType;
+import com.carproduction.demo.demo.entities.Car;
+import com.carproduction.demo.demo.enums.CarType;
+import com.carproduction.demo.demo.enums.FuelType;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

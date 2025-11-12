@@ -1,7 +1,7 @@
-package com.security.demo.demo.dtos;
+package com.carproduction.demo.demo.dtos;
 
-import com.security.demo.demo.enums.CarType;
-import com.security.demo.demo.enums.FuelType;
+import com.carproduction.demo.demo.enums.CarType;
+import com.carproduction.demo.demo.enums.FuelType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

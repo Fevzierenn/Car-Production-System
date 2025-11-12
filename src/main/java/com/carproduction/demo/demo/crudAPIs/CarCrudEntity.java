@@ -1,8 +1,8 @@
-package com.security.demo.demo.crudAPIs;
+package com.carproduction.demo.demo.crudAPIs;
 
 import org.springframework.http.ResponseEntity;
 
-import com.security.demo.demo.dtos.CarDto;
+import com.carproduction.demo.demo.dtos.CarDto;
 
 public interface CarCrudEntity {
     
