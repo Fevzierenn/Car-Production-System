@@ -19,8 +19,8 @@ public class UserConfig {
                         .password("eren123")
                         .roles("USER")
                         .build(),
-                User.withUsername("ADMIN")
-                        .password("admin123")
+                User.withUsername("admin")
+                        .password(passwordEncoder.encode("admin123"))
                         .roles("ADMIN")
                         .build()
         );
