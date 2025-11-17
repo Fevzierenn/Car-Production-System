@@ -16,7 +16,7 @@ public class UserConfig {
     {
         return new InMemoryUserDetailsManager(
                 User.withUsername("eren")
-                        .password("eren123")
+                        .password(passwordEncoder.encode("eren123"))
                         .roles("USER")
                         .build(),
                 User.withUsername("admin")
