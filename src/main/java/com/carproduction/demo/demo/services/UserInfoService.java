@@ -1,10 +1,8 @@
 package com.carproduction.demo.demo.services;
 
-
 import com.carproduction.demo.demo.entities.UserInfo;
 import com.carproduction.demo.demo.repositories.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,24 +23,21 @@ public class UserInfoService implements UserDetailsService {
         this.encoder = encoder;
     }
 
-    // Method to load user details by username (email)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Fetch user from the database by email (username)
+        // Try to find the user by email first, then by name.
+        // This allows logging in with either email or username.
         Optional<UserInfo> userInfo = repository.findByEmail(username);
-
         if (userInfo.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with email: " + username);
+            userInfo = repository.findByName(username);
         }
 
-        // Convert UserInfo to UserDetails (UserInfoDetails)
-        UserInfo user = userInfo.get();
-        return new UserInfoDetails(user);
+        // If user is not found by either email or name, throw an exception.
+        return userInfo.map(UserInfoDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
-    // Add any additional methods for registering or managing users
     public String addUser(UserInfo userInfo) {
-        // Encrypt password before saving
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
         return "User added successfully!";

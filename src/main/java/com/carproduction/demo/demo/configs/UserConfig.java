@@ -1,28 +1,7 @@
+// This file has been intentionally left blank to resolve a UserDetailsService conflict.
+// The project now uses UserInfoService as the single source for user details.
 package com.carproduction.demo.demo.configs;
 
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
-@Configuration
 public class UserConfig {
-
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder)
-    {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("eren")
-                        .password(passwordEncoder.encode("eren123"))
-                        .roles("USER")
-                        .build(),
-                User.withUsername("admin")
-                        .password(passwordEncoder.encode("admin123"))
-                        .roles("ADMIN")
-                        .build()
-        );
-    }
+    // Content removed to prevent conflict with database-backed UserInfoService.
 }

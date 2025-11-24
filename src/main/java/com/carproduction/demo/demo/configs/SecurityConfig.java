@@ -2,15 +2,12 @@ package com.carproduction.demo.demo.configs;
 
 
 import com.carproduction.demo.demo.filter.JwtAuthFilter;
-import com.carproduction.demo.demo.services.UserInfoDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     public final JwtAuthFilter jwtAuthFilter;
@@ -46,9 +44,9 @@ public class SecurityConfig {
                         // Public endpoints
                         .requestMatchers( "/auth/addNewUser", "/auth/generateToken","/auth/welcome", "/auth", "/cars/**", "/h2-console/**").permitAll()
 
-                        // Role-based endpoints
-                        .requestMatchers("/auth/user/**").hasRole("USER")
-                        .requestMatchers("/auth/admin/**").hasRole("ADMIN")
+                        // Role-based endpoints (good for defense-in-depth, but @PreAuthorize is primary)
+                        .requestMatchers("/auth/user/**").hasAuthority("ROLE_USER")
+                        .requestMatchers("/auth/admin/**").hasAuthority("ROLE_ADMIN")
 
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
@@ -62,50 +60,10 @@ public class SecurityConfig {
 
                 // Add JWT filter before Spring Security's default filter
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                
+
                 // Allow H2 console to be embedded in a frame
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
 
         return http.build();
     }
-
-
-
-
-    /*
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-         httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                 .authorizeHttpRequests(auth -> auth
-                         .requestMatchers("/user/auth").hasRole("ADMIN")
-                         .requestMatchers("/public/**", "/cars/**", "/user").permitAll().anyRequest().authenticated()
-                 ).formLogin(Customizer.withDefaults());
-
-         return httpSecurity.build();
-
-     }
-
-
-    .requestMatchers("/public/**").permitAll()
-    Bu şu demek: /public/hello, /public/info, vs. → herkes erişebilir.
-
-
-    1. Tüm endpoint'leri açık yapmak istersen:
-
-    .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-
-    2. Sadece bazılarını açık, diğerlerini korumalı yapmak istersen:
-    .requestMatchers("/public/**", "/cars/**").permitAll()
-    .anyRequest().authenticated()
-    3. Role bazlı erişim:
-
-    .requestMatchers("/admin/**").hasRole("ADMIN")
-    .requestMatchers("/cars/**").hasAnyRole("USER", "ADMIN")
-
-
-
-
-
-      */
-
 }

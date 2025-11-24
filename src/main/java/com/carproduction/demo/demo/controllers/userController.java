@@ -6,6 +6,7 @@ import com.carproduction.demo.demo.requests.AuthRequest;
 import com.carproduction.demo.demo.services.JwtService;
 import com.carproduction.demo.demo.services.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,24 +17,31 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class userController {
 
+    @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private JwtService jwtService;
+    @Autowired
     private UserInfoService userInfoService;
-
-    public userController(AuthenticationManager authenticationManager, JwtService jwtService, UserInfoService userInfoService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-        this.userInfoService = userInfoService;
-    }
 
     @GetMapping("/welcome")
     public String notSecureMethodApi(){
         return "This is not secured";
     }
 
-    @GetMapping
-    public String securedMethodApi(){
-        return "This is securedApi";
+    @GetMapping("/user/profile")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public String userProfile(Authentication authentication) {
+        // Spring Security, token'ı doğruladıktan sonra bu metoda erişim izni verir
+        // ve 'Authentication' nesnesini bizim için doldurur.
+        // Bu nesneden kullanıcı adını alabiliriz.
+        return "Welcome to your profile, " + authentication.getName();
+    }
+
+    @GetMapping("/admin/profile")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String adminProfile() {
+        return "Welcome to Admin Profile";
     }
 
     @PostMapping("/addNewUser")
@@ -52,12 +60,4 @@ public class userController {
             throw new UsernameNotFoundException("Invalid user request!");
         }
     }
-
-
-
-
-
-
-
-
 }
